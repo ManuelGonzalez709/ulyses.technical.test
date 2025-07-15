@@ -1,0 +1,27 @@
+<configuration>
+    <!-- Appender para log general -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Appender solo para logs de peticiones -->
+    <appender name="REQUESTS" class="ch.qos.logback.core.FileAppender">
+        <file>logs/requests.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Raíz: solo log general a consola -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+    <!-- Logger solo para el filtro de peticiones -->
+    <logger name="com.septeo.ulyses.technical.test.filter.RequestLoggingFilter" level="INFO" additivity="false">
+        <appender-ref ref="REQUESTS" />
+    </logger>
+</configuration>

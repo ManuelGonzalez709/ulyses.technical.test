@@ -1,14 +1,15 @@
 package com.septeo.ulyses.technical.test.controller;
 
 import com.septeo.ulyses.technical.test.entity.Sales;
+import com.septeo.ulyses.technical.test.entity.Vehicle;
 import com.septeo.ulyses.technical.test.service.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -19,8 +20,8 @@ public class SalesController {
     private SalesService salesService;
 
     @GetMapping
-    public ResponseEntity<List<Sales>> getAllSales() {
-        return ResponseEntity.ok(salesService.getAllSales());
+    public ResponseEntity<List<Sales>> getAllSales(@RequestParam(defaultValue = "0") Long page) {
+        return ResponseEntity.ok(salesService.getAllSales(page));
     }
 
     @GetMapping("/{id}")
@@ -31,5 +32,24 @@ public class SalesController {
     }
 
     // TODO: implement here your endpoints
+
+    @GetMapping("/brands/{bradId}")
+    public ResponseEntity<List<Sales>> getSalesByBrandId(@PathVariable Long bradId) {
+        return ResponseEntity.ok(salesService.getSalesByBrandId(bradId));
+    }
+
+    @GetMapping("/vehicles/{vehicleId}")
+    public ResponseEntity<List<Sales>> getSalesByVehicleId(@PathVariable Long vehicleId) {
+        return ResponseEntity.ok(salesService.getSalesByVehicleId(vehicleId));
+    }
+
+    @GetMapping("/vehicles/bestSelling")
+    public ResponseEntity<List<Vehicle>> getBestSellingVehicle(
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
+    ) {
+        return ResponseEntity.ok(salesService.getBestSellingVehicle(startDate, endDate));
+    }
+
 
 }
